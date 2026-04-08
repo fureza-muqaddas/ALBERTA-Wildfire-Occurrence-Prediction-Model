@@ -6,3 +6,6 @@ matplotlib
 seaborn
 scikit-learn 
 python-dotenv
+rasterio
+scipy
+shap
