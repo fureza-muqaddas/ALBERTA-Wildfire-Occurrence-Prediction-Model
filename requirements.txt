@@ -1,11 +1,13 @@
 cdsapi>=0.7.7
-pandas 
-numpy 
-xgboost 
+pandas
+numpy
+xgboost
 matplotlib
 seaborn
-scikit-learn 
+scikit-learn
 python-dotenv
 rasterio
 scipy
 shap
+elevation
+requests

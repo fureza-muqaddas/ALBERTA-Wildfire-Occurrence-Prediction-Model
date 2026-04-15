@@ -2,3 +2,22 @@
 *.nc
 *.csv
 __pycache__/
+
+
+# Data files
+data/raw/
+data/processed/
+*.csv
+*.nc
+*.bz2
+*.tif
+*.hdr
+*.zip
+
+# Outputs (optional - you may want to keep these)
+# outputs/
+
+# Environment
+.env
+__pycache__/
+*.pyc

@@ -23,13 +23,23 @@ print("Loading data and model...")
 df = pd.read_csv("data/processed/model_dataset.csv", parse_dates=["rep_date"])
 
 BASE_FEATURES = [
+    "lat", "lon",
     "temp", "rh", "ws", "precip",
     "ffmc", "dmc", "dc", "isi", "bui", "fwi",
-    "month", "day_of_year", "lat", "lon",
+    "month", "day_of_year",
 ]
 feature_cols = BASE_FEATURES + [c for c in ["land_cover"] if c in df.columns]
 
-df = df.dropna(subset=feature_cols + ["fire", "year"])
+if "elevation" in df.columns:
+    feature_cols += ["elevation", "slope"]
+if "aspect" in df.columns:
+    df["aspect"] = df["aspect"].where(df["aspect"] >= 0, other=np.nan)
+    df["aspect_sin"] = np.sin(np.radians(df["aspect"]))
+    df["aspect_cos"] = np.cos(np.radians(df["aspect"]))
+    feature_cols += ["aspect_sin", "aspect_cos"]
+
+df = df.dropna(subset=BASE_FEATURES + ["fire", "year"])
+
 X = df[feature_cols]
 y = df["fire"]
 
@@ -53,7 +63,7 @@ print("  Done.")
 # ── 4. Summary beeswarm plot ──────────────────────────────────────────────────
 print("Saving shap_summary.png...")
 fig, ax = plt.subplots(figsize=(10, 7))
-shap.plots.beeswarm(shap_values, max_display=14, show=False)
+shap.plots.beeswarm(shap_values, max_display=19, show=False)
 plt.title("SHAP Summary — Wildfire Occurrence Model", fontsize=13)
 plt.tight_layout()
 plt.savefig("outputs/shap_summary.png", dpi=150, bbox_inches="tight")
@@ -62,7 +72,7 @@ plt.close()
 # ── 5. Mean |SHAP| bar chart ──────────────────────────────────────────────────
 print("Saving shap_bar.png...")
 fig, ax = plt.subplots(figsize=(8, 6))
-shap.plots.bar(shap_values, max_display=14, show=False)
+shap.plots.bar(shap_values, max_display=19, show=False)
 plt.title("Mean |SHAP| Feature Importance", fontsize=13)
 plt.tight_layout()
 plt.savefig("outputs/shap_bar.png", dpi=150, bbox_inches="tight")

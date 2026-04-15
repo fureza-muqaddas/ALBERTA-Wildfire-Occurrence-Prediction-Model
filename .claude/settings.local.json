@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python build_dataset.py)"
+      "Bash(python build_dataset.py)",
+      "Bash(python -c \":*)",
+      "Bash(python train.py)",
+      "Bash(pip install:*)",
+      "Bash(python download_dem.py)",
+      "Bash(eio clip:*)",
+      "Bash(python explain.py)"
     ]
   }
 }
